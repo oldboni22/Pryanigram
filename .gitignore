@@ -1,0 +1,12 @@
+**/.idea
+*.editorconfig
+
+*.json
+*.xml
+.env
+
+**/obj
+**/bin
+*.user
+
+nuget.config
