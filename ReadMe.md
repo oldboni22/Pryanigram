@@ -10,7 +10,38 @@ to the world of bot development. Forget about endless switch
 statements and spaghetti code. Build bots using familiar Middleware Pipelines, 
 Dependency Injection, and strictly typed handlers.
 
+```csharp
+class Program
+{
+    static void Main(string[] args)
+    {
+        var builder = new BotBuilder();
 
+        builder.WithDefaultClient("Your api token");
+        
+        builder.UseExceptionHandler((client, exception, _) =>
+        {
+            Console.WriteLine(exception.Message);
+            Console.WriteLine(exception.StackTrace);
+
+            return Task.CompletedTask;
+        });
+        
+        builder.Services.AddScopedBag();
+        builder.Services.AddScoped<ISessionProvider, ExampleSessionProvider>();
+
+        builder.FlowBuilder
+            .Use<ParseMessageFlow>()
+            .UseConverters(typeof(Program).Assembly)
+            .UseHandlers(typeof(Program).Assembly);
+
+        var bot = builder.Build();
+
+        bot.Start();
+        Console.ReadLine();
+    }
+}
+```
 
 > Underlying Client Architecture
 >
