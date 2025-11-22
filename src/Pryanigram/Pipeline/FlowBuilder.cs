@@ -41,6 +41,14 @@ public sealed class FlowBuilder
         _flowFactories.Add(_ => instance);
         return this;
     }
+
+    public FlowBuilder Use(Func<FlowContext, FlowDelegate, Task> flow)
+    {
+        var inlineFlow = new InlineFlow.InlineFlow(flow);
+
+        _flowFactories.Add(_ => inlineFlow);
+        return this;
+    }
     
     public FlowBuilder UseHandlers(params Assembly[] assemblies)
     {

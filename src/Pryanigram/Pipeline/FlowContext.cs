@@ -10,6 +10,7 @@ public sealed class FlowContext
     
     public required IServiceProvider ServiceProvider { get; init; }
     
+    
     public long? UserId { get; set; }
     
     public long? ChatId { get; set; }
