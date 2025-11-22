@@ -1,6 +1,6 @@
 using Pryanigram.ScopedBag.Contract;
 
-namespace Pryanigram.ScopedBag;
+namespace Pryanigram.Extensions;
 
 public static class ScopedBagExtensions
 {
