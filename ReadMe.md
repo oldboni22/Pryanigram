@@ -16,4 +16,4 @@ Dependency Injection, and strictly typed handlers.
 > it is architected around the <code>ITelegramBotClient</code> abstraction.
 > Dependencies are limited to this interface and the <code>Update</code>
 > model, making the system highly testable and
-> allowing for potential substitution of the underlying HTTP client.
+> allowing for potential substitution of the underlying telegram api client.
