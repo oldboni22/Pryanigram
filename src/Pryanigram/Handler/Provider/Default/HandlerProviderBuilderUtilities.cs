@@ -41,7 +41,7 @@ internal static class HandlerProviderBuilderUtilities
     {
         return types.Where(t => Attribute.IsDefined(t, typeof(FromCommandAttribute)))
             .Where(t => t is { IsAbstract: false, IsInterface: false })
-            .Where(t => t.IsSubclassOf(typeof(ITelegramMessageHandler)));
+            .Where(t => t.IsAssignableTo(typeof(ITelegramMessageHandler)));
     }
     
     private static Func<IServiceProvider, ITelegramMessageHandler> BuildProviderInvoker(Type handlerType)
