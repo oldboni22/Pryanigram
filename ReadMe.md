@@ -1,4 +1,8 @@
 # Pryanigram 🍪 <br>
+
+> Please, note that the current implementation is a preview version,
+> provided for demonstation purposes and intended to collect feedback.
+ 
 A modern, high-performance, and modular framework for building Telegram bots on .NET.
 
 Pryanigram brings the best architectural practices of ASP.NET Core
