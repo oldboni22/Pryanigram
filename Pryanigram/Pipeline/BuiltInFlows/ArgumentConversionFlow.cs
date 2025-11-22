@@ -2,9 +2,9 @@ using Pryanigram.ArgumentsConversion.Converter.Contract;
 
 namespace Pryanigram.Pipeline.BuiltInFlows;
 
-public sealed class ArgumentConversionFlow(IArgumentConverter converter) : FlowEntry
+public sealed class ArgumentConversionFlow(IArgumentConverter converter) : IFlowEntry
 {
-    public override async Task InvokeAsync(FlowContext context, FlowDelegate next)
+    public async Task InvokeAsync(FlowContext context, FlowDelegate next)
     {
         var converted = await converter.Convert(context);
 

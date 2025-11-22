@@ -2,7 +2,8 @@ using System.Text;
 
 namespace Pryanigram.Exceptions;
 
-public sealed class ConversionException(string arguments, Exception innerException) : Exception(CreateMessage(arguments), innerException)
+public sealed class ConversionException(string arguments, Exception? innerException = null) 
+    : Exception(CreateMessage(arguments), innerException)
 {
     private const string DisplayMessage = "Failed to convert arguments.";
 

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Pryanigram.ArgumentsConversion;
 using Pryanigram.ArgumentsConversion.Converter.Contract;
 using Pryanigram.ArgumentsConversion.Converter.Default;
+using Pryanigram.Exceptions.Flow;
 using Pryanigram.Handler.Provider.Contract;
 using Pryanigram.Handler.Provider.Default;
 using Pryanigram.Pipeline.BuiltInFlows;
@@ -19,11 +20,11 @@ public sealed class FlowBuilder
 
     private readonly Bot.BotBuilder _botBuilder;
     
-    private readonly List<Func<IServiceProvider,FlowEntry>> _flowFactories = [];
+    private readonly List<Func<IServiceProvider, IFlowEntry>> _flowFactories = [];
 
     private readonly HashSet<Type> _registeredTypes = new();
     
-    public FlowBuilder Use<TFlow>() where TFlow : FlowEntry
+    public FlowBuilder Use<TFlow>() where TFlow : IFlowEntry
     {
         _botBuilder.SecureBuilt();
         EnforceUniqueTypes(typeof(TFlow));
@@ -32,7 +33,7 @@ public sealed class FlowBuilder
         return this;
     }
     
-    public FlowBuilder Use(FlowEntry instance)
+    public FlowBuilder Use(IFlowEntry instance)
     {
         _botBuilder.SecureBuilt();
         EnforceUniqueTypes(instance.GetType());
@@ -73,7 +74,7 @@ public sealed class FlowBuilder
     {
         if (!_registeredTypes.Add(type))
         {
-            throw new ArgumentException($"The type {type} has already been registered."); //TODO custom ex
+            throw new DuplicateFlowException(type);
         }
     }
     

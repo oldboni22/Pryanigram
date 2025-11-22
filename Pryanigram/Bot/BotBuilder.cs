@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Pryanigram.ArgumentsConversion;
 using Pryanigram.Pipeline;
 using Telegram.Bot;
@@ -23,7 +24,7 @@ public sealed class BotBuilder
     public FlowBuilder FlowBuilder { get; }
     
     private readonly IServiceCollection _services = new ServiceCollection();
-
+    
     public IServiceCollection Services
     {
         get
@@ -31,6 +32,13 @@ public sealed class BotBuilder
             SecureBuilt();
             return _services;
         }
+    }
+
+    public BotBuilder WithTelegramClient(Func<IServiceProvider, ITelegramBotClient> factory)
+    {
+        Services.TryAddSingleton(factory);
+
+        return this;
     }
     
     public BotBuilder WithCancellationTokenSource(CancellationTokenSource cancellationTokenSource)
@@ -47,18 +55,19 @@ public sealed class BotBuilder
         return this;
     }
     
-    public Bot Build(string apiToken)
+    public Bot Build()
     {
         SecureBuilt();
         
         _isBuilt = true;
         
         var sp = _services.BuildServiceProvider();
-        
+
+        var client = sp.GetRequiredService<ITelegramBotClient>();
         var flow = FlowBuilder.Build(sp);
         
         return new Bot(
-            apiToken,
+            client,
             sp,
             flow,
             _errorHandler,

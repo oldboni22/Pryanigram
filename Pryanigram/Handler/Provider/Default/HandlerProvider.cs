@@ -6,14 +6,14 @@ namespace Pryanigram.Handler.Provider.Default;
 
 public sealed class HandlerProvider : IHandlerProvider
 {
-    internal HandlerProvider(ReadOnlyDictionary<string, Func<IServiceProvider, TelegramMessageHandler>> handlerSources)
+    internal HandlerProvider(ReadOnlyDictionary<string, Func<IServiceProvider, ITelegramMessageHandler>> handlerSources)
     {
         _handlerSources = handlerSources;
     }
 
-    private readonly ReadOnlyDictionary<string, Func<IServiceProvider, TelegramMessageHandler>> _handlerSources;
+    private readonly ReadOnlyDictionary<string, Func<IServiceProvider, ITelegramMessageHandler>> _handlerSources;
     
-    public TelegramMessageHandler? ConstructHandler(FlowContext context)
+    public ITelegramMessageHandler? ConstructHandler(FlowContext context)
     {
         if (string.IsNullOrEmpty(context.Command))
         {

@@ -6,11 +6,11 @@ using Pryanigram.ScopedBag.Contract;
 namespace Pryanigram.SessionManagement.SessionProvider.Contract;
 
 public abstract class SessionHandler<TStep>(IScopedBag bag, ISessionProvider sessionProvider) 
-    : TelegramMessageHandler where TStep : struct, Enum
+    : ITelegramMessageHandler where TStep : struct, Enum
 {
     protected IScopedBag Bag { get; } = bag;
     
-    public override async Task HandleAsync(FlowContext context, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(FlowContext context, CancellationToken cancellationToken = default)
     {
         var session = Bag.Get<UserSession>(DefaultScopedBagKeys.SessionKey)
             ?? new UserSession(context.Command!, default(TStep)!.ToString(), new());

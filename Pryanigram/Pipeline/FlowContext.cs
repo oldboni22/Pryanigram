@@ -6,8 +6,6 @@ namespace Pryanigram.Pipeline;
 
 public sealed class FlowContext
 {
-    public required ITelegramBotClient BotClient { get; init; }
-    
     public required Update Update { get; init; }
     
     public required IServiceProvider ServiceProvider { get; init; }

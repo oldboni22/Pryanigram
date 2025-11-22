@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace Pryanigram.Handler;
 
-public abstract class TelegramMessageHandler
+public interface ITelegramMessageHandler
 {
     public abstract Task HandleAsync(
         FlowContext context,

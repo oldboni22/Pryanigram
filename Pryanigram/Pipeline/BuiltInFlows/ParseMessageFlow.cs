@@ -3,9 +3,9 @@ using Telegram.Bot.Types.Enums;
 
 namespace Pryanigram.Pipeline.BuiltInFlows;
 
-public sealed class ParseMessageFlow : FlowEntry
+public sealed class ParseMessageFlow : IFlowEntry
 {
-    public override async Task InvokeAsync(FlowContext context, FlowDelegate next)
+    public async Task InvokeAsync(FlowContext context, FlowDelegate next)
     {
         (long? userId, long? chatId) = GetUsedIdAndChatId(context.Update);
         

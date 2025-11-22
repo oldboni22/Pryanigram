@@ -8,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Pryanigram.Pipeline.BuiltInFlows;
 
 public sealed class SessionFlow(
-    IHandlerProvider handlerProvider) : FlowEntry
+    IHandlerProvider handlerProvider) : IFlowEntry
 {
-    public override async Task InvokeAsync(FlowContext context, FlowDelegate next)
+    public async Task InvokeAsync(FlowContext context, FlowDelegate next)
     {
         if (string.IsNullOrEmpty(context.Command)
             || context.ChatId is null

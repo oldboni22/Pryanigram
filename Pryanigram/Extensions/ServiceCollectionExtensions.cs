@@ -2,13 +2,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Pryanigram.ScopedBag.Contract;
 
-namespace Pryanigram.ScopedBag;
+namespace Pryanigram.Extensions;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddScopedBag(this IServiceCollection services)
     {
-        services.TryAddScoped<IScopedBag, Default.ScopedBag>();
+        services.TryAddScoped<IScopedBag, ScopedBag.Default.ScopedBag>();
         
         return services;
     }

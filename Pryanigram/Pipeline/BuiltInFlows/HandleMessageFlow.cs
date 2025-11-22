@@ -2,9 +2,9 @@ using Pryanigram.Handler.Provider.Contract;
 
 namespace Pryanigram.Pipeline.BuiltInFlows;
 
-public sealed class HandleMessageFlow(IHandlerProvider provider) : FlowEntry
+public sealed class HandleMessageFlow(IHandlerProvider provider) : IFlowEntry
 {
-    public override async Task InvokeAsync(FlowContext context, FlowDelegate next)
+    public async Task InvokeAsync(FlowContext context, FlowDelegate next)
     {
         var handler = provider.ConstructHandler(context);
         

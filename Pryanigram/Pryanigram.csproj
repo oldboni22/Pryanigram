@@ -3,11 +3,14 @@
     <PropertyGroup>
         <PackageId>Pryanigram</PackageId>
         <Authors>Pryanik</Authors>
-        
+        <RepositoryUrl>https://github.com/oldboni22/Pryanigram</RepositoryUrl>
+        <Version>0.1.2</Version>
         
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Configurations>Debug;Release;Preview</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>

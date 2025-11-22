@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Pryanigram.Exceptions.Command;
 
 namespace Pryanigram.ArgumentsConversion.Converter.Default;
 
@@ -25,12 +26,12 @@ internal static class ConverterBuilderUtilities
             {
                 if (string.IsNullOrEmpty(command))
                 {
-                    throw new ArgumentException(); //TODO custom ex
+                    throw new EmptyCommandException();
                 }
                 
                 if (!converters.TryAdd(command, BuildConverterInvoker(providerType)))
                 {
-                    throw new ArgumentException(); //TODO custom ex
+                    throw new DuplicateCommandException(command);
                 }        
             });
         }
@@ -50,9 +51,8 @@ internal static class ConverterBuilderUtilities
             {
                 return await provider.ConvertUntypedAsync(arguments);
             }
-            
-            throw new InvalidOperationException(); //TODO custom ex
-            
+
+            throw new InvalidOperationException();
         };
     }
     
