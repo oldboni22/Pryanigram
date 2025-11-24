@@ -12,23 +12,18 @@ public sealed class ArgumentConverter(
     
     public async Task<object?> Convert(FlowContext context)
     {
-        if (string.IsNullOrEmpty(context.Command) || string.IsNullOrEmpty(context.Arguments))
-        {
-            return null;
-        }
-        
-        if (!_converters.TryGetValue(context.Command, out var converter))
+        if (!_converters.TryGetValue(context.Command!, out var converter))
         {
             return null;
         }
 
         try
         {
-            return await converter(context.Arguments, context.ServiceProvider);
+            return await converter(context.Arguments!, context.ServiceProvider);
         }
         catch (Exception e)
         {
-            var conversionException = new ConversionException(context.Arguments, e);
+            var conversionException = new ConversionException(context.Arguments!, e);
 
             throw conversionException;
         }

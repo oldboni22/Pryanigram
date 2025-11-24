@@ -4,7 +4,7 @@ using Pryanigram.Pipeline;
 
 namespace Pryanigram.MessageHandling.Provider.Default;
 
-public sealed class MessageHandler(ReadOnlyDictionary<string, Func<IServiceProvider, FlowContext, Task>> handlers) : IMessageHandler
+public sealed class MessageHandler(ReadOnlyDictionary<string, Func<FlowContext, Task>> handlers) : IMessageHandler
 {
     public async Task HandleMessage(FlowContext context)
     {
@@ -13,7 +13,7 @@ public sealed class MessageHandler(ReadOnlyDictionary<string, Func<IServiceProvi
             return;
         }
         
-        await handler.Invoke(context.ServiceProvider, context);
+        await handler.Invoke(context);
     }
 
     public bool HasCommand(string command)

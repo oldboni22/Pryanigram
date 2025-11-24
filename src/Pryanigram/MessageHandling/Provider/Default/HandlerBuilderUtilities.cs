@@ -9,7 +9,7 @@ namespace Pryanigram.MessageHandling.Provider.Default;
 
 internal static class HandlerBuilderUtilities
 {
-    internal static ReadOnlyDictionary<string, Func<IServiceProvider, FlowContext, Task>> BuildDictionary(
+    internal static ReadOnlyDictionary<string, Func<FlowContext, Task>> BuildDictionary(
         IEnumerable<Assembly> assemblies)
     {
         var handlerTypes = assemblies
@@ -17,7 +17,7 @@ internal static class HandlerBuilderUtilities
                 .GetTypes()
                 .WhereTypesAreValid());
         
-        var dictionary = new ConcurrentDictionary<string, Func<IServiceProvider, FlowContext, Task>>();
+        var dictionary = new ConcurrentDictionary<string, Func<FlowContext, Task>>();
 
         Parallel.ForEach(handlerTypes, handlerType =>
         {
@@ -48,7 +48,7 @@ internal static class HandlerBuilderUtilities
     }
     
     private static void HandleController(
-        Type type, ConcurrentDictionary<string, Func<IServiceProvider, FlowContext, Task>> dictionary)
+        Type type, ConcurrentDictionary<string, Func<FlowContext, Task>> dictionary)
     {
         var validMethods = type
             .GetMethods(BindingFlags.Public | BindingFlags.Instance)
@@ -72,7 +72,7 @@ internal static class HandlerBuilderUtilities
     }
     
     private static void HandleHandle(
-        Type type, ConcurrentDictionary<string, Func<IServiceProvider, FlowContext, Task>> dictionary)
+        Type type, ConcurrentDictionary<string, Func<FlowContext, Task>> dictionary)
     {
         var commandAttribute = Attribute.GetCustomAttribute(type, typeof(FromCommandAttribute)) as FromCommandAttribute;
         var command = commandAttribute!.Message;
@@ -88,7 +88,7 @@ internal static class HandlerBuilderUtilities
         }
     }
     
-    private static Func<IServiceProvider, FlowContext, Task> BuildHandleInvoker(Type handlerType)
+    private static Func<FlowContext, Task> BuildHandleInvoker(Type handlerType)
     {
         var flowContextProperty = typeof(MessageHandle)
             .GetProperty(MessageHandle.FlowContextFieldName, 
@@ -96,9 +96,9 @@ internal static class HandlerBuilderUtilities
         
         var factory = ActivatorUtilities.CreateFactory(handlerType, Type.EmptyTypes);
 
-        return async (sp, context) =>
+        return async (context) =>
         {
-            var instance = (MessageHandle)factory(sp, null);
+            var instance = (MessageHandle)factory(context.ServiceProvider, null);
 
             try
             {
@@ -113,7 +113,7 @@ internal static class HandlerBuilderUtilities
         };
     }
 
-    private static Func<IServiceProvider, FlowContext, Task> BuildControllerInvoker(Type controllerType, MethodInfo method)
+    private static Func<FlowContext, Task> BuildControllerInvoker(Type controllerType, MethodInfo method)
     {
         if (!typeof(Task).IsAssignableFrom(method.ReturnType))
         {
@@ -130,10 +130,9 @@ internal static class HandlerBuilderUtilities
         
         if (parameters.Length == 0)
         {
-            
-            return async (sp, context) =>
+            return async (context) =>
             {
-                var instance = (ControllerBase)factory(sp, null);
+                var instance = (ControllerBase)factory(context.ServiceProvider, null);
                 
                 try
                 {
@@ -152,9 +151,9 @@ internal static class HandlerBuilderUtilities
         
         if (parameters.Length == 1)
         {
-            return async (sp, context) =>
+            return async (context) =>
             {
-                var instance = (ControllerBase)factory(sp, null);
+                var instance = (ControllerBase)factory(context.ServiceProvider, null);
 
                 try
                 {

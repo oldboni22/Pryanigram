@@ -6,6 +6,12 @@ public sealed class ArgumentConversionFlow(IArgumentConverter converter) : IFlow
 {
     public async Task InvokeAsync(FlowContext context, FlowDelegate next)
     {
+        if (string.IsNullOrEmpty(context.Command) || string.IsNullOrEmpty(context.Arguments))
+        {
+            await next(context);
+            return;
+        }
+        
         var converted = await converter.Convert(context);
 
         context.ConvertedArguments = converted;
