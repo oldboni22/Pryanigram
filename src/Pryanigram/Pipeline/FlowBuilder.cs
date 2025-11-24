@@ -5,8 +5,8 @@ using Pryanigram.ArgumentsConversion;
 using Pryanigram.ArgumentsConversion.Converter.Contract;
 using Pryanigram.ArgumentsConversion.Converter.Default;
 using Pryanigram.Exceptions.Flow;
-using Pryanigram.Handler.Provider.Contract;
-using Pryanigram.Handler.Provider.Default;
+using Pryanigram.MessageHandling.Provider.Contract;
+using Pryanigram.MessageHandling.Provider.Default;
 using Pryanigram.Pipeline.BuiltInFlows;
 
 namespace Pryanigram.Pipeline;
@@ -52,14 +52,14 @@ public sealed class FlowBuilder
     
     public FlowBuilder UseHandlers(params Assembly[] assemblies)
     {
-        _botBuilder.Services.TryAddSingleton<IHandlerProvider>(_ => HandlerProviderBuilder.Build(assemblies));
+        _botBuilder.Services.TryAddSingleton<IMessageHandler>(_ => HandlerBuilder.Build(assemblies));
         
         return Use<HandleMessageFlow>();
     }
     
-    public FlowBuilder UseHandlers(Func<IHandlerProvider> customHandlerProviderFactory, params Assembly[] assemblies)
+    public FlowBuilder UseHandlers(Func<IMessageHandler> customHandlerFactory, params Assembly[] assemblies)
     {
-        _botBuilder.Services.TryAddSingleton<IHandlerProvider>(customHandlerProviderFactory());
+        _botBuilder.Services.TryAddSingleton<IMessageHandler>(customHandlerFactory());
         
         return Use<HandleMessageFlow>();
     }

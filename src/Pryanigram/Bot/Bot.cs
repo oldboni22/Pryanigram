@@ -40,15 +40,18 @@ public sealed class Bot
     }
 
     private async Task ProcessMessageAsync(ITelegramBotClient client, Update update,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
+        var token = _cancellationTokenSource?.Token ?? CancellationToken.None;
         var scope = _serviceProvider.CreateScope();
+        
         try
         {
             var context = new FlowContext
             {
                 ServiceProvider = scope.ServiceProvider,
-                Update = update
+                Update = update,
+                CancellationToken = token,
             };
 
             await _flow(context);

@@ -1,27 +1,14 @@
-using Pryanigram.Handler.Provider.Contract;
+using Pryanigram.MessageHandling.Provider.Contract;
 
 namespace Pryanigram.Pipeline.BuiltInFlows;
 
-public sealed class HandleMessageFlow(IHandlerProvider provider) : IFlowEntry
+public sealed class HandleMessageFlow(IMessageHandler handler) : IFlowEntry
 {
     public async Task InvokeAsync(FlowContext context, FlowDelegate next)
     {
-        var handler = provider.ConstructHandler(context);
-        
-        if (handler is not null)
+        if (!string.IsNullOrEmpty(context.Command))
         {
-            try
-            {
-                await handler.HandleAsync(context);
-                context.IsHandled = true;
-            }
-            finally
-            {
-                if (handler is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
+            await handler.HandleMessage(context);    
         }
         
         await next(context);

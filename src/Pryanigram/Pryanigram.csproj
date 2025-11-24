@@ -4,7 +4,7 @@
         <PackageId>Pryanigram</PackageId>
         <Authors>Pryanik</Authors>
         <RepositoryUrl>https://github.com/oldboni22/Pryanigram</RepositoryUrl>
-        <Version>0.2.0</Version>
+        <Version>0.3.0</Version>
         
         <PackageDescription>
             Pryanigram brings the best architectural practices of ASP.NET Core to the world of bot development.

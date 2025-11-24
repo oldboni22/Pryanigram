@@ -1,14 +1,13 @@
-using Pryanigram.Handler.Provider.Contract;
-using Pryanigram.ScopedBag;
 using Pryanigram.ScopedBag.Contract;
 using Pryanigram.SessionManagement.SessionProvider.Contract;
-using System;
 using Microsoft.Extensions.DependencyInjection;
+using Pryanigram.Extensions;
+using Pryanigram.MessageHandling.Provider.Contract;
 
 namespace Pryanigram.Pipeline.BuiltInFlows;
 
 public sealed class SessionFlow(
-    IHandlerProvider handlerProvider) : IFlowEntry
+    IMessageHandler handlerProvider) : IFlowEntry
 {
     public async Task InvokeAsync(FlowContext context, FlowDelegate next)
     {
@@ -22,7 +21,7 @@ public sealed class SessionFlow(
 
         var sessionProvider = context.ServiceProvider.GetRequiredService<ISessionProvider>();
         
-        if (handlerProvider.HasHandler(context.Command))
+        if (handlerProvider.HasCommand(context.Command))
         {
             await sessionProvider.DeleteSessionAsync(context.UserId.Value, context.ChatId.Value);
             
